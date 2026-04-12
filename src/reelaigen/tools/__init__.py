@@ -1,10 +1,7 @@
-from .pdf import PDFToolError, extract_pdf_metadata, pdf_to_images, pdfminer_extract_text, pypdf_extract_text
+from .pdf import read_pdf_metadata, read_pdf_text, save_pdf_pages_as_images
 
 __all__ = [
-    "PDFToolError",
-    "extract_pdf_metadata",
-    "pdf_to_images",
-    "pdfminer_extract_text",
-    "pypdf_extract_text",
+    "read_pdf_metadata",
+    "read_pdf_text",
+    "save_pdf_pages_as_images",
 ]
-
