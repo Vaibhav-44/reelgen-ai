@@ -19,6 +19,26 @@ def read_pdf_metadata(pdf_path: str | Path) -> dict:
     return metadata
 
 
+def save_embedded_images(
+    pdf_path: str | Path,
+    output_dir: str | Path = "temp_metadata",
+) -> list[Path]:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    reader = PdfReader(str(pdf_path))
+    saved_paths: list[Path] = []
+
+    for page_num, page in enumerate(reader.pages, start=1):
+        for image_num, image_file in enumerate(page.images, start=1):
+            image_name = Path(image_file.name).name
+            image_path = output_dir / f"page_{page_num:04d}_{image_num:04d}_{image_name}"
+            image_path.write_bytes(image_file.data)
+            saved_paths.append(image_path)
+
+    return saved_paths
+
+
 def save_pdf_pages_as_images(
     pdf_path: str | Path,
     output_dir: str | Path,

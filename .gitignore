@@ -3,6 +3,7 @@ venv/
 data/
 media/
 output/
+temp_metadata/
 __pycache__/
 *.pyc
 .env

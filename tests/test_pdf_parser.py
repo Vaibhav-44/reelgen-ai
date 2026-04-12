@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from reelaigen.nodes.pdf_parser import PDFParser, PDFParserConfig
 from reelaigen.schemas import PDFParseError
+from reelaigen.tools.pdf import save_embedded_images
 
 SAMPLE_PDF_PATH = Path(r"G:\reelaigen\sample.pdf")
 
@@ -51,6 +52,19 @@ class PDFParserTests(unittest.TestCase):
             self.assertEqual(len(saved_images), result.metadata["page_count"])
             self.assertTrue(all(image.exists() for image in saved_images))
             self.assertTrue(all(page.image_path is not None for page in result.pages))
+
+    def test_extract_embedded_images_to_temp_metadata(self) -> None:
+        if not SAMPLE_PDF_PATH.exists():
+            self.skipTest(f"Sample PDF not found: {SAMPLE_PDF_PATH}")
+
+        output_dir = Path("temp_metadata")
+        saved_images = save_embedded_images(SAMPLE_PDF_PATH, output_dir=output_dir)
+
+        print(f"\nEmbedded images saved: {len(saved_images)}")
+        for image_path in saved_images[:10]:
+            print(image_path)
+
+        self.assertTrue(output_dir.exists())
 
     def test_rejects_non_pdf_extension(self) -> None:
         with TemporaryDirectory() as tmp_dir:
