@@ -1,3 +1,8 @@
 manim
+langchain
+langchain-mistralai
+langchain-openai
+pydantic
 pypdf
 pypdfium2
+python-dotenv
