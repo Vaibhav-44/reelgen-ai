@@ -4,12 +4,13 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import SystemMessage
 from pydantic import BaseModel, Field
 
 if __package__ is None or __package__ == "":
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from reelaigen.llm.integration import build_multimodal_message
 from reelaigen.llm.integration import get_mistral_llm
 from reelaigen.llm.prompts import CONTENT_ANALYZER_PROMPT
 
@@ -40,25 +41,14 @@ class ContentParser:
         self.llm = llm or get_mistral_llm()
         self.config = config or ContentParserConfig()
 
-    def run(self, document_text: str) -> ContentAnalysis:
+    def run(self, document_text: str, images: list[str | Path] | None = None) -> ContentAnalysis:
         if not document_text.strip():
             raise ValueError("document_text is empty")
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    CONTENT_ANALYZER_PROMPT
-                ),
-                (
-                    "human",
-                    "{document_text}",
-                ),
-            ]
-        )
-
         structured_llm = self.llm.with_structured_output(ContentAnalysis, method="json_schema")
-        messages = prompt.invoke({"document_text": document_text[: self.config.max_chars]})
+        messages = [
+            SystemMessage(content=CONTENT_ANALYZER_PROMPT),
+            build_multimodal_message(document_text[: self.config.max_chars], images),
+        ]
         return structured_llm.invoke(messages)
-
 
