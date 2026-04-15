@@ -1,0 +1,144 @@
+{
+    "sections": [
+      {
+        "section_id": 0,
+        "target": "Scaled Dot-Product Attention mechanism",
+        "section_text": "Scaled Dot-Product Attention\nMulti-Head Attention\nFigure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.\nquery with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values.\nIn practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V. We compute the matrix of outputs as:\nAttention(Q, K, V) = softmax(QKT / √dk)V (1)\nThe two most commonly used attention functions are additive attention [2], and dot-product (multiplicative) attention. Dot-product attention is identical to our algorithm, except for the scaling factor of 1/√dk. Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efficient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+        "narration": "Let's explore the Scaled Dot-Product Attention mechanism. This diagram illustrates how it works. The process involves taking the dot product of the query with all keys, dividing each by the square root of dk, and applying a softmax function to obtain the weights on the values. In practice, this attention function is computed on a set of queries simultaneously, packed into a matrix Q, with keys and values packed into matrices K and V. The output is calculated as shown in the equation: Attention(Q, K, V) equals softmax of (QK transpose divided by the square root of dk) times V. Dot-product attention, which is identical to this algorithm except for a scaling factor, is faster and more space-efficient than additive attention, as it leverages optimized matrix multiplication code.",
+        "approx_duration_seconds": 45,
+        "min_duration_seconds": 40,
+        "max_duration_seconds": 50,
+        "timing_estimate": [
+          {
+            "start_second": 0.0,
+            "end_second": 8.0,
+            "note": "Introduction to Scaled Dot-Product Attention mechanism."
+          },
+          {
+            "start_second": 8.0,
+            "end_second": 15.0,
+            "note": "Explanation of the diagram and the process of taking the dot product of the query with all keys."
+          },
+          {
+            "start_second": 15.0,
+            "end_second": 25.0,
+            "note": "Description of dividing by the square root of dk and applying the softmax function."     
+          },
+          {
+            "start_second": 25.0,
+            "end_second": 35.0,
+            "note": "Explanation of computing the attention function on a set of queries simultaneously."     
+          },
+          {
+            "start_second": 35.0,
+            "end_second": 45.0,
+            "note": "Comparison of dot-product attention and additive attention, highlighting the efficiency of dot-product attention."
+          }
+        ]
+      },
+      {
+        "section_id": 1,
+        "target": "Scaling factor in dot-product attention",
+        "section_text": "Scaled Dot-Product Attention\nMulti-Head Attention\nFigure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.\nquery with all keys, divide each by√dk, and apply a softmax function to obtain the weights on the values.\nIn practice, we compute the attention function on a set of queries simultaneously, packed together into a matrixQ. The keys and values are also packed together into matricesK andV . We compute the matrix of outputs as:\nAttention(Q,K,V ) = softmax(QK T\n√dk\n)V (1)\nThe two most commonly used attention functions are additive attention [2], and dot-product (multiplicative) attention. Dot-product attention is identical to our algorithm, except for the scaling factor of 1√dk. Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efficient in practice, since it can be implemented using highly optimized matrix multiplication code.\nWhile for small values ofdk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values ofdk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1√dk.\n3.2.2 Multi-Head Attention\nInstead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneficial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2.\nMulti-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this.",
+        "narration": "In this section, we explore the concept of Scaled Dot-Product Attention and Multi-Head Attention. On the left, we see Scaled Dot-Product Attention, and on the right, Multi-Head Attention with parallel attention layers. In dot-product attention, queries are compared with keys, divided by the square root of dk, and a softmax function is applied to get the weights on the values. This process is efficiently computed using matrices. Dot-product attention includes a scaling factor to prevent large dot products from pushing the softmax function into regions with small gradients. Multi-Head Attention improves performance by projecting queries, keys, and values multiple times and performing attention in parallel, allowing the model to focus on different representation subspaces.",
+        "approx_duration_seconds": 60,
+        "min_duration_seconds": 50,
+        "max_duration_seconds": 70,
+        "timing_estimate": [
+          {
+            "start_second": 0.0,
+            "end_second": 10.0,
+            "note": "Introduction to Scaled Dot-Product Attention and Multi-Head Attention."
+          },
+          {
+            "start_second": 10.0,
+            "end_second": 20.0,
+            "note": "Explanation of the left side of Figure 2: Scaled Dot-Product Attention."
+          },
+          {
+            "start_second": 20.0,
+            "end_second": 30.0,
+            "note": "Explanation of the right side of Figure 2: Multi-Head Attention."
+          },
+          {
+            "start_second": 30.0,
+            "end_second": 45.0,
+            "note": "Process of comparing queries with keys and applying softmax in dot-product attention."   
+          },
+          {
+            "start_second": 45.0,
+            "end_second": 55.0,
+            "note": "Importance of the scaling factor in dot-product attention."
+          },
+          {
+            "start_second": 55.0,
+            "end_second": 65.0,
+            "note": "Explanation of Multi-Head Attention and its benefits."
+          }
+        ]
+      },
+      {
+        "section_id": 2,
+        "target": "Introduction to Multi-Head Attention",
+        "section_text": "3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneficial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this.", 
+        "narration": "Instead of using a single attention function with high-dimensional keys, values, and queries, multi-head attention projects these elements multiple times with different learned linear projections. This process results in lower-dimensional versions of queries, keys, and values. The attention function is then performed in parallel on each of these projected versions, producing output values that are concatenated and projected once more to yield the final values. This mechanism allows the model to focus on information from various representation subspaces at different positions simultaneously, which a single attention head cannot achieve effectively.",
+        "approx_duration_seconds": 45,
+        "min_duration_seconds": 40,
+        "max_duration_seconds": 50,
+        "timing_estimate": [
+          {
+            "start_second": 0.0,
+            "end_second": 8.0,
+            "note": "Introduction to the limitation of single attention function."
+          },
+          {
+            "start_second": 8.0,
+            "end_second": 18.0,
+            "note": "Explanation of linear projections in multi-head attention."
+          },
+          {
+            "start_second": 18.0,
+            "end_second": 28.0,
+            "note": "Description of parallel attention function performance."
+          },
+          {
+            "start_second": 28.0,
+            "end_second": 38.0,
+            "note": "Explanation of concatenation and final projection."
+          },
+          {
+            "start_second": 38.0,
+            "end_second": 45.0,
+            "note": "Benefits of multi-head attention over single attention head."
+          }
+        ]
+      },
+      {
+        "section_id": 3,
+        "target": "Benefits of Multi-Head Attention",
+        "section_text": "Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this.",    
+        "narration": "Multi-head attention offers significant advantages. It enables the model to simultaneously focus on information from various representation subspaces at different positions. This capability is hindered in models with a single attention head due to averaging.",
+        "approx_duration_seconds": 15,
+        "min_duration_seconds": 12,
+        "max_duration_seconds": 18,
+        "timing_estimate": [
+          {
+            "start_second": 0.0,
+            "end_second": 5.0,
+            "note": "Introduction to the benefits of multi-head attention."
+          },
+          {
+            "start_second": 5.0,
+            "end_second": 12.0,
+            "note": "Explanation of how multi-head attention allows the model to attend to different representation subspaces."
+          },
+          {
+            "start_second": 12.0,
+            "end_second": 15.0,
+            "note": "Comparison with single attention head and the issue of averaging."
+          }
+        ]
+      }
+    ] 
+}
+    

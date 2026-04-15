@@ -48,9 +48,21 @@ class ContentParser:
         self.llm = llm or get_mistral_llm()
         self.config = config or ContentParserConfig()
 
-    def run(self, document_text: str, images: list[Any] | None = None) -> ContentAnalysis:
+    def run(
+        self,
+        document_text: str,
+        images: list[Any] | None = None,
+        algorithm_context: dict[str, Any] | None = None,
+    ) -> ContentAnalysis:
         if not document_text.strip():
             raise ValueError("document_text is empty")
+
+        if algorithm_context:
+            document_text = (
+                f"{document_text}\n\n"
+                "Algorithm context:\n"
+                f"{algorithm_context}"
+            )
 
         structured_llm = self.llm.with_structured_output(ContentAnalysis, method="json_schema")
         messages = [

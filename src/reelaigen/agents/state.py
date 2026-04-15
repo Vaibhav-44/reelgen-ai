@@ -16,7 +16,18 @@ class ParsedPDFPayload(TypedDict):
     pages: list[ParsedPDFPage]
 
 
+class AlgorithmAnalysisPayload(TypedDict, total=False):
+    algorithm_detected: bool
+    algorithm_name: str | None
+    pseudocode: str | None
+    sample_input: dict
+    state_trace: list[dict]
+    verification_enabled: bool
+
+
 class PDFContentAgentState(TypedDict, total=False):
     pdf_path: str
     parsed_pdf: ParsedPDFPayload
+    algorithm_analysis: AlgorithmAnalysisPayload
     content_analysis: dict
+    script_plan: dict
