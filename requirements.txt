@@ -1,5 +1,6 @@
 manim
 langchain
+langgraph
 langchain-mistralai
 langchain-openai
 pydantic

@@ -31,3 +31,4 @@ class PDFContentAgentState(TypedDict, total=False):
     algorithm_analysis: AlgorithmAnalysisPayload
     content_analysis: dict
     script_plan: dict
+    final_output: dict
