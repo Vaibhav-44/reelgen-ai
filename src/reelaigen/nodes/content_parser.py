@@ -12,7 +12,7 @@ if __package__ is None or __package__ == "":
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from reelaigen.llm.integration import build_multimodal_message
-from reelaigen.llm.integration import get_mistral_llm
+from reelaigen.llm.integration import get_mistral_llm, get_llm
 from reelaigen.llm.prompts import CONTENT_ANALYZER_PROMPT
 
 
@@ -45,7 +45,7 @@ class ContentParserConfig:
 
 class ContentParser:
     def __init__(self, llm=None, config: ContentParserConfig | None = None) -> None:
-        self.llm = llm or get_mistral_llm()
+        self.llm = llm or get_llm()
         self.config = config or ContentParserConfig()
 
     def run(

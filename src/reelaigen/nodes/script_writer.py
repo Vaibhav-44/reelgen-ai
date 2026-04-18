@@ -12,7 +12,7 @@ if __package__ is None or __package__ == "":
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from reelaigen.llm.integration import build_multimodal_message
-from reelaigen.llm.integration import get_mistral_llm
+from reelaigen.llm.integration import get_mistral_llm, get_llm
 from reelaigen.llm.prompts import SCRIPT_WRITER_PROMPT
 from reelaigen.nodes.content_parser import ContentSection
 
@@ -45,7 +45,7 @@ class ScriptWriterConfig:
 
 class ScriptWriter:
     def __init__(self, llm=None, config: ScriptWriterConfig | None = None) -> None:
-        self.llm = llm or get_mistral_llm()
+        self.llm = llm or get_llm()
         self.config = config or ScriptWriterConfig()
 
     def run(

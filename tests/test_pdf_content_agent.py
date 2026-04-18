@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import sys
 import unittest
@@ -36,6 +37,25 @@ class PDFContentAgentTests(unittest.TestCase):
                 content_parser=ContentParser(),
                 script_writer=ScriptWriter(),
             )
+            app = agent.build()
+            graph = app.get_graph()
+
+            print("\nLangGraph Mermaid:")
+            print(graph.draw_mermaid())
+
+            png_path = Path("langgraph_agent_graph.png")
+            try:
+                png_bytes = graph.draw_mermaid_png()
+                png_path.write_bytes(png_bytes)
+                print(f"\nSaved graph PNG: {png_path.resolve()}")
+            except Exception:
+                print("\nGraph PNG export is unavailable in this environment.")
+
+            try:
+                print("\nLangGraph ASCII:")
+                graph.print_ascii()
+            except Exception:
+                print("\nLangGraph ASCII view is unavailable in this environment.")
 
             result = agent.run(
                 SAMPLE_PDF_PATH,
@@ -47,6 +67,9 @@ class PDFContentAgentTests(unittest.TestCase):
                 },
                 thread_id="test-thread",
             )
+
+        print("\nFinal agent output:")
+        print(json.dumps(result["final_output"], indent=2, ensure_ascii=False))
 
         self.assertIn("parsed_pdf", result["final_output"])
         self.assertIn("content_analysis", result["final_output"])

@@ -83,15 +83,20 @@ def build_multimodal_message(document_text: str, images: list[Any] | None = None
 
 
 def get_llm():
-    from langchain_openai import ChatOpenAI
+#     from langchain_deepseek import ChatDeepSeek
+#     if not os.getenv("DEEPSEEK_API_KEY"):
+#         raise RuntimeError("Set DEEPSEEK_API_KEY before using the content parser.")
 
-    if not os.getenv("OPENAI_API_KEY"):
-        raise RuntimeError("Set OPENAI_API_KEY before using the content parser.")
+#     llm = ChatDeepSeek(
+#         model="deepseek-chat",
+#         temperature=0,
+#         max_tokens=None,
+#         timeout=None,
+#         max_retries=2,
+#    )
+#     return llm
+    return get_mistral_llm()
 
-    return ChatOpenAI(
-        model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-        temperature=0,
-    )
 
 
 def get_mistral_llm():
