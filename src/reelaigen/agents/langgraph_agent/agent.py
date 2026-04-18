@@ -25,7 +25,7 @@ class ReelAIGraphAgent:
         self.content_parser = content_parser or ContentParser()
         self.script_writer = script_writer or ScriptWriter()
 
-    def build(self):
+    def build(self): 
         nodes = GraphNodes(
             pdf_parser=self.pdf_parser,
             content_parser=self.content_parser,
