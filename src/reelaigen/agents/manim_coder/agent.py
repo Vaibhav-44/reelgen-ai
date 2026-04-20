@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from .contracts import ManimCoderInput
+from .symbol_lookup import SymbolLookup
 from .state import ManimCoderState, build_initial_manim_coder_state
 
 
@@ -14,6 +15,9 @@ class ManimCoderAgent:
     Retrieval, code generation, validation, rendering, and repair
     can be added here step by step.
     """
+
+    def __init__(self, symbol_lookup: SymbolLookup | None = None) -> None:
+        self.symbol_lookup = symbol_lookup or SymbolLookup()
 
     def build_initial_state(
         self,
